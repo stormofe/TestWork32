@@ -19,6 +19,55 @@
 
 # production
 /build
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js build output
+.next/
+out/
+
+# Build output
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# VSCode settings
+.vscode/
+
+# MacOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+
+# Stylelint/ESLint caches
+.stylelintcache
+.eslintcache
+
+# Optional: if you're using coverage tools
+coverage/
+
+# Optional: local IDE settings
+.idea/
+*.swp
+*.swo
 
 # misc
 .DS_Store
