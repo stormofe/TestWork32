@@ -18,7 +18,6 @@ const formatTime = (timestamp: number) =>
 	});
 
 export default function WeatherCard({ city, weather }: Props) {
-	const encodedCity = encodeURIComponent(city);
 
 	const icon = weather.weather[0].icon;
 	const description = weather.weather[0].description;
@@ -85,7 +84,7 @@ export default function WeatherCard({ city, weather }: Props) {
 
 			<div className="mt-3 text-center">
 				<Link
-					href={`/forecast/${encodedCity}`}
+					href={`/forecast/${city}`}
 					className="btn btn-outline-primary"
 				>
 					📅 Прогноз на 5 дней

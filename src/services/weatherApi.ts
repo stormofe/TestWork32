@@ -28,7 +28,7 @@ const MOCK_WEATHER: WeatherData = {
 		deg: 180,
 	},
 	clouds: {
-		all: 5, 
+		all: 5,
 	},
 	sys: {
 		country: 'RU',
@@ -90,9 +90,11 @@ export const getCurrentWeather = async (city: string, lang = 'ru'): Promise<Weat
 		console.log('[MOCK] getCurrentWeather:', city);
 		return MOCK_WEATHER;
 	}
+	const decoded = decodeURIComponent(city);
+	const trimmedCity = decoded.split(',')[0].trim();
 	const res = await instance.get('/data/2.5/weather', {
 		params: {
-			q: city,
+			q: trimmedCity,
 			appid: API_KEY,
 			units: 'metric',
 			lang,
@@ -106,9 +108,11 @@ export const getForecast = async (city: string, lang = 'ru') => {
 		console.log('[MOCK] getForecast:', city);
 		return MOCK_FORECAST;
 	}
+	const decoded = decodeURIComponent(city);
+	const trimmedCity = decoded.split(',')[0].trim();
 	const res = await instance.get('/data/2.5/forecast', {
 		params: {
-			q: city,
+			q: trimmedCity,
 			appid: API_KEY,
 			units: 'metric',
 			lang,

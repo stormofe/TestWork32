@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       '@store': path.resolve(__dirname, 'src/store'),
       '@services': path.resolve(__dirname, 'src/services'),
       '@types': path.resolve(__dirname, 'src/types'),
+			'@hooks': path.resolve(__dirname, 'src/hooks'),
     };
 
     return config;
