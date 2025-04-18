@@ -6,7 +6,6 @@ import axios from 'axios';
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
 
-
 type WeatherState = {
 	selectedCity: string;
 	favorites: string[];
@@ -25,7 +24,6 @@ type WeatherState = {
 
 	fetchWeather: (city: string) => Promise<void>;
 
-
 	citySuggestions: string[];
 	isSuggestionsLoading: boolean;
 	suggestionError: string | null;
@@ -34,9 +32,12 @@ type WeatherState = {
 	setSuggestionsLoading: (loading: boolean) => void;
 	setSuggestionError: (msg: string | null) => void;
 
-
 	setSelectedCity: (city: string) => void;
 
+	hydrated: boolean;
+	setHydrated: () => void;
+
+	cleanupCache: () => void;
 };
 
 export const useWeatherStore = create<WeatherState>()(
@@ -51,6 +52,9 @@ export const useWeatherStore = create<WeatherState>()(
 				citySuggestions: [],
 				isSuggestionsLoading: false,
 				suggestionError: null,
+				hydrated: false,
+
+				setHydrated: () => set({ hydrated: true }),
 
 				setWeatherData: (city, data) =>
 					set((state) => ({
@@ -64,43 +68,46 @@ export const useWeatherStore = create<WeatherState>()(
 					})),
 
 				setSelectedCity: (city) => set({ selectedCity: city }),
+
 				addFavorite: (city) =>
-					set((state) => {
-						if (!state.favorites.includes(city)) {
-							return { favorites: [...state.favorites, city] };
-						}
-						return state;
-					}),
+					set((state) =>
+						state.favorites.includes(city)
+							? state
+							: { favorites: [...state.favorites, city] }
+					),
+
 				removeFavorite: (city) =>
 					set((state) => ({
 						favorites: state.favorites.filter((c) => c !== city),
 					})),
+
 				isFavorite: (city) => get().favorites.includes(city),
 
 				setLoading: (loading) => set({ isLoading: loading }),
 				setError: (message) => set({ error: message }),
 
 				fetchWeather: async (city: string) => {
+					get().cleanupCache();
+
 					const {
 						setLoading,
 						setError,
 						setWeatherData,
 						weatherData,
 					} = get();
-				
-					const key = city.toLowerCase();
+
+					const key = city;
 					const cacheEntry = weatherData[key];
-					const ttl = 10 * 60 * 1000; // 10 минут
-				
-					// Проверка кэша
+					const ttl = 10 * 60 * 1000;
+
 					if (cacheEntry && Date.now() - cacheEntry.timestamp < ttl) {
 						console.log(`[WeatherStore] Using cached weather for "${city}"`);
 						return;
 					}
-				
+
 					setLoading(true);
 					setError(null);
-				
+
 					try {
 						const data = await getCurrentWeather(city);
 						setWeatherData(city, data);
@@ -114,21 +121,40 @@ export const useWeatherStore = create<WeatherState>()(
 						setLoading(false);
 					}
 				},
-				
+
 				setCitySuggestions: (cities) => set({ citySuggestions: cities }),
 				clearCitySuggestions: () => set({ citySuggestions: [] }),
 				setSuggestionsLoading: (loading) => set({ isSuggestionsLoading: loading }),
 				setSuggestionError: (msg) => set({ suggestionError: msg }),
 
+				cleanupCache: () => {
+					const TTL = 10 * 60 * 1000;
+					const now = Date.now();
+					const current = get().weatherData;
+
+					const filtered = Object.fromEntries(
+						Object.entries(current).filter(([_, entry]) => now - entry.timestamp < TTL)
+					);
+
+					set({ weatherData: filtered });
+				},
 			}),
 			{
 				name: 'weather-store',
-				skipHydration: true,
+				partialize: (state) => ({
+					favorites: state.favorites,
+					weatherData: state.weatherData,
+					selectedCity: state.selectedCity,
+				}),
+				onRehydrateStorage: () => (state) => {
+					state?.setHydrated?.();
+					state?.cleanupCache?.();
+				},
 			}
 		),
 		{
-      name: 'WeatherStore',
-      enabled: process.env.NODE_ENV === 'development',
-    }
+			name: 'WeatherStore',
+			enabled: process.env.NODE_ENV === 'development',
+		}
 	)
 );

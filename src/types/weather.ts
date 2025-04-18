@@ -17,18 +17,9 @@ export interface WeatherData {
   wind: {
     speed: number;
     deg: number;
-    gust?: number;
   };
-  sys: {
-    country: string;
-    sunrise: number;
-    sunset: number;
-  };
-  dt: number;
-  timezone: number;
-  visibility: number;
-  cod: number;
 }
+
 
 export interface CitySuggestion {
   name: string;
