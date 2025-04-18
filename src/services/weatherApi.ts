@@ -6,27 +6,41 @@ const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 
 
 const MOCK_WEATHER: WeatherData = {
-	name: 'Mock City',
-	weather: [{ id: 800, main: 'Clear', description: 'ясно', icon: '01d' }],
+	name: 'Moscow',
+	weather: [
+		{
+			id: 800,
+			main: 'Clear',
+			description: 'clear sky',
+			icon: '01d',
+		},
+	],
 	main: {
 		temp: 23.4,
 		feels_like: 24,
-		temp_min: 20,
-		temp_max: 26,
-		pressure: 1012,
-		humidity: 50,
+		temp_min: 21,
+		temp_max: 25,
+		pressure: 1013,
+		humidity: 56,
 	},
-	wind: { speed: 3.5, deg: 120 },
-	sys: { country: 'MC', sunrise: 1681468800, sunset: 1681512000 },
-	dt: Date.now(),
-	timezone: 0,
+	wind: {
+		speed: 3.5,
+		deg: 180,
+	},
+	clouds: {
+		all: 5, 
+	},
+	sys: {
+		country: 'RU',
+		sunrise: 1713400000,
+		sunset: 1713440000,
+	},
 	visibility: 10000,
-	cod: 200,
 };
 
 const MOCK_SUGGESTIONS: CitySuggestion[] = [
-	{ name: 'Moscow', lat: 55.75, lon: 37.62, country: 'RU', state: 'Moscow'  },
-	{ name: 'Mockville', lat: 50.5, lon: 30.5, country: 'UA', state: 'Mock State'  },
+	{ name: 'Moscow', lat: 55.75, lon: 37.62, country: 'RU', state: 'Moscow' },
+	{ name: 'Mockville', lat: 50.5, lon: 30.5, country: 'UA', state: 'Mock State' },
 ];
 
 const MOCK_FORECAST: ForecastResponse = {
@@ -49,7 +63,7 @@ const MOCK_FORECAST: ForecastResponse = {
 		weather: [
 			{
 				id: 800,
-				main: 'Clear',
+				main: 'Rain',
 				description: `Ясно +${i}`,
 				icon: '01d',
 			},
