@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.scss';
+import Navbar from "@ui/Navbar";
 
 export const metadata: Metadata = {
 	title: 'Weather',
@@ -28,7 +29,8 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body cz-shortcut-listen="true">
-				<div>
+				<Navbar />
+				<div className="container">
 					{children}
 				</div>
 			</body>
