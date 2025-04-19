@@ -185,7 +185,6 @@ export const useWeatherStore = create<WeatherState>()(
 						};
 					}),
 
-
 				setWeatherLoading: (loading) => set({ isLoadingWeather: loading }),
 				setWeatherError: (msg) => set({ errorWeather: msg }),
 
@@ -204,7 +203,7 @@ export const useWeatherStore = create<WeatherState>()(
 						console.log('[Forecast] Using cached forecast for:', city);
 						return;
 					}
-
+					console.log('FORECAST', city);
 					await wrapAsync(
 						() => getForecast(city),
 						{
@@ -293,6 +292,7 @@ export const useWeatherStore = create<WeatherState>()(
 					favorites: state.favorites,
 					weatherData: state.weatherData,
 					selectedCity: state.selectedCity,
+					forecastData: state.forecastData,
 				}),
 				onRehydrateStorage: () => (state) => {
 					state?.setHydrated?.();

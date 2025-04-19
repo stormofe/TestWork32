@@ -25,11 +25,9 @@ export default function SearchBar() {
 
 	useEffect(() => {
 		if (hydrated && selectedCity) {
-			
 			setQuery(selectedCity);
-			fetchWeather(selectedCity);
-			fetchForecast(selectedCity);
 			skipNextDebounce()
+			
 		}
 	}, [hydrated, selectedCity]);
 
@@ -39,9 +37,6 @@ export default function SearchBar() {
 	}, [debouncedQuery, isPending]);
 
 	const handleSelect = async (city: string) => {
-
-		console.log('handleSelect', city);
-		
 		skipNextDebounce();
 		setQuery(city);
 		setSelectedCity(city);

@@ -21,14 +21,6 @@ interface Props {
 
 export default function TodayTempChart({ forecast }: Props) {
 	const data = mapTodayHourlyForecast(forecast);
-
-	const getColorByTime = (unix: number, sunrise: number, sunset: number) => {
-		if (unix < sunrise || unix > sunset) {
-			return 'rgba(63, 81, 181, 0.4)'; // ночь
-		}
-		return 'rgba(255, 193, 7, 0.5)'; // день
-	};
-
 	return (
 		<div className={styles.wrapper}>
 			<ResponsiveContainer width="100%" height="100%">
@@ -37,20 +29,6 @@ export default function TodayTempChart({ forecast }: Props) {
 						<filter id="shadow">
 							<feDropShadow dx="0" dy="1" stdDeviation="2" floodColor="black" floodOpacity="0.5" />
 						</filter>
-						<linearGradient id="tempGradient" x1="0" y1="0" x2="1" y2="0">
-							{data.map((point, index) => {
-								const percent = index / (data.length - 1);
-								const color = getColorByTime(point.dt, forecast.city.sunrise, forecast.city.sunset);
-								return (
-									<stop
-										key={index}
-										offset={`${percent * 100}%`}
-										stopColor={color}
-										stopOpacity={0.6}
-									/>
-								);
-							})}
-						</linearGradient>
 					</defs>
 
 					<XAxis dataKey="time" padding={{ left: 20, right: 20 }} />
@@ -70,7 +48,7 @@ export default function TodayTempChart({ forecast }: Props) {
 						type="monotone"
 						dataKey="temp"
 						stroke="#2196f3"
-						fill="url(#tempGradient)"
+						fill="rgba(255, 193, 7, 0.4)"
 						strokeWidth={2}
 						dot={<WeatherIconDot />}
 						activeDot={{ r: 6 }}

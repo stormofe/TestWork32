@@ -12,8 +12,8 @@ export default function FavoriteWeatherList() {
 	const fetchWeather = useWeatherStore((state) => state.fetchWeather);
 
 	useEffect(() => {
-		if (!hydrated) return;
-
+		if (!hydrated || favorites.length === 0) return;
+	
 		favorites.forEach((city) => {
 			if (!weatherData[city]) {
 				fetchWeather(city);

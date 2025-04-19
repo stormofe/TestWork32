@@ -37,7 +37,7 @@ export default function ClientForecast({ city }: Props) {
 
   return (
     <div>
-      {isLoadingForecast && <p className="text-center">Loading forecast...</p>}
+      {isLoadingForecast && <div className="mt-4">	<WeatherCardSk /></div>}
       {errorForecast && <p className="text-danger text-center">{errorForecast}</p>}
 
       {forecast && (

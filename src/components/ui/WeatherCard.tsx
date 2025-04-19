@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { WeatherData } from '@/types/weather';
 import styles from './WeatherCard.module.scss';
 import FavoriteButton from '../FavoriteButton';
+import Link from 'next/link';
 
 interface Props {
 	city: string;
@@ -28,7 +29,14 @@ export default function WeatherCard({ city, weather }: Props) {
 				{/* Left: City & time */}
 				<div className="col-md-3 text-center text-md-start mb-3 mb-md-0">
 					<h4 className="mb-2">{city}</h4>
-					<p className="mb-0">{date}</p>
+					<p className="mb-2">{date}</p>
+					<Link
+						href={`/forecast/${encodeURIComponent(city)}`}
+						className="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1"
+					>
+						See 5-day forecast
+						<span className="bi bi-arrow-right" />
+					</Link>
 				</div>
 
 				{/* Center: Temp & Icon */}
