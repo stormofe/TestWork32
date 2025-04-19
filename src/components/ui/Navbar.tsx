@@ -3,44 +3,58 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useWeatherStore } from '@store/useWeatherStore';
+import { useState } from 'react';
 
 export default function Navbar() {
   const pathname = usePathname();
   const selectedCity = useWeatherStore((s) => s.selectedCity);
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen((prev) => !prev);
+  const closeMenu = () => setIsOpen(false);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light px-4 shadow-sm mb-4">
-      <Link className="navbar-brand fw-bold" href="/">
-        Weather App
-      </Link>
+      {/* Бургер-кнопка */}
+      <button
+        className="navbar-toggler"
+        type="button"
+        aria-label="Toggle navigation"
+        onClick={toggleMenu}
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
 
-      <div className="collapse navbar-collapse">
-        <ul className="navbar-nav ms-auto gap-3">
+      {/* Меню (collapsible) */}
+      <div className={`collapse navbar-collapse justify-content-center ${isOpen ? 'show' : ''}`}>
+        <ul className="navbar-nav text-center gap-3">
           <li className="nav-item">
             <Link
               className={`nav-link ${pathname === '/' ? 'active' : ''}`}
               href="/"
+              onClick={closeMenu}
             >
-              Главная
+              Weather
             </Link>
           </li>
           <li className="nav-item">
             <Link
               className={`nav-link ${pathname === '/favorites' ? 'active' : ''}`}
               href="/favorites"
+              onClick={closeMenu}
             >
-              Избранное
+              Favorite cities
             </Link>
           </li>
           {selectedCity && (
             <li className="nav-item">
               <Link
-                className={`nav-link ${
-                  pathname.startsWith('/forecast') ? 'active' : ''
-                }`}
+                className={`nav-link ${pathname.startsWith('/forecast') ? 'active' : ''}`}
                 href={`/forecast/${encodeURIComponent(selectedCity)}`}
+                onClick={closeMenu}
               >
-                Прогноз
+                Forecast
               </Link>
             </li>
           )}

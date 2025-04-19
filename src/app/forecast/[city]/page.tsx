@@ -8,8 +8,8 @@ export async function generateMetadata({ params }: Props) {
 	const { city } = await params
 
 	return {
-		title: `Прогноз погоды в ${city} — Weather App`,
-		description: `Прогноз погоды на 5 дней в ${city}. Температура, ветер, осадки.`,
+		title: `Weather forecast in ${city} — Weather App`,
+		description: `Weather forecast for 5 days in ${city}. Temperature, wind, precipitation.`,
 	};
 }
 
@@ -17,8 +17,8 @@ export default async function ForecastPage({ params }: Props) {
 	const { city } = await params
 
 	return (
-		<div className="container py-5">
-			<h2 className="text-center mb-4">Прогноз погоды на 5 дней</h2>
+		<div className="container py-3">
+			<h2 className="text-center mb-4">Weather forecast for 5 days</h2>
 			<ClientForecast city={city} />
 		</div>
 	);

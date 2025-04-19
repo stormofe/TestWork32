@@ -1,54 +1,51 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getForecast } from '@services/weatherApi';
-import type { ForecastResponse } from '@/types/weather';
-import ForecastCard from '@components/ForecastCard';
+import { useEffect } from 'react';
+import { useWeatherStore } from '@store/useWeatherStore';
+import WeatherCardSk from '@/components/ui/skeletons/WeatherCardSk';
+import FiveDayChart from '@/components/ui/charts/FiveDayChart';
 
 interface Props {
-  city: string;
+  city?: string;
 }
 
 export default function ClientForecast({ city }: Props) {
-  const [forecast, setForecast] = useState<ForecastResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    selectedCity,
+    forecastData,
+    fetchForecast,
+    isLoadingForecast,
+    errorForecast,
+		hydrated
+  } = useWeatherStore();
 
-  useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      try {
-        const data = await getForecast(city);
-        setForecast(data);
-      } catch {
-        setError('Ошибка загрузки прогноза');
-      } finally {
-        setLoading(false);
-      }
-    };
+	const activeCity = (city && decodeURIComponent(city)) || selectedCity;
 
-    fetch();
-  }, [city]);
+	useEffect(() => {
+    if (activeCity) {
+      fetchForecast(activeCity);
+    }
+  }, [activeCity]);
 
-  if (!city) {
-    return <p className="text-center text-danger">Город не указан</p>;
+	if (!hydrated) return <div className="mt-4">	<WeatherCardSk /></div>
+
+  const forecast = activeCity ? forecastData[activeCity]?.data : null;
+
+  if (!activeCity) {
+    return <p className="text-center text-danger">No city selected</p>;
   }
 
   return (
     <div>
-      {loading && <p className="text-center">Загрузка...</p>}
-      {error && <p className="text-danger text-center">{error}</p>}
+      {isLoadingForecast && <p className="text-center">Loading forecast...</p>}
+      {errorForecast && <p className="text-danger text-center">{errorForecast}</p>}
 
       {forecast && (
         <>
           <h5 className="text-center mb-4">
             {forecast.city.name}, {forecast.city.country}
           </h5>
-          <div className="d-flex flex-wrap gap-3 justify-content-center">
-            {forecast.list.slice(0, 5).map((item, index) => (
-              <ForecastCard key={index} item={item} />
-            ))}
-          </div>
+					<FiveDayChart forecast={forecast} />
         </>
       )}
     </div>

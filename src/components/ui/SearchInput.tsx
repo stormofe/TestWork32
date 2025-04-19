@@ -4,7 +4,6 @@ import React from 'react';
 
 interface SearchInputProps {
   id: string;
-  label: string;
   value: string;
   placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,7 +12,6 @@ interface SearchInputProps {
 
 export default function SearchInput({
   id,
-  label,
   value,
   placeholder,
   onChange,
@@ -21,9 +19,6 @@ export default function SearchInput({
 }: SearchInputProps) {
   return (
     <div className={`form-group ${className || ''}`}>
-      <label htmlFor={id} className="form-label">
-        {label}
-      </label>
       <input
         id={id}
         type="text"

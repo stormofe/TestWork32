@@ -9,40 +9,56 @@ import SuggestionList from '@ui/SuggestionList';
 import styles from './SearchBar.module.scss';
 
 export default function SearchBar() {
-  const [query, setQuery] = useState('');
-  const [debouncedQuery, skipNextDebounce, isPending] = useDebouncedValue(query, 400);
+	const [query, setQuery] = useState('');
+	const [debouncedQuery, skipNextDebounce, isPending] = useDebouncedValue(query, 400);
 
-  const {
-    citySuggestions,
-    fetchWeather,
-    fetchCitySuggestions,
-    clearCitySuggestions,
-    setSelectedCity,
-  } = useWeatherStore();
+	const {
+		citySuggestions,
+		fetchForecast,
+		fetchCitySuggestions,
+		clearCitySuggestions,
+		selectedCity,
+		setSelectedCity,
+		fetchWeather,
+		 hydrated
+	} = useWeatherStore();
 
-  useEffect(() => {
-    if (isPending) return;
-    fetchCitySuggestions(debouncedQuery);
-  }, [debouncedQuery, isPending]);
+	useEffect(() => {
+		if (hydrated && selectedCity) {
+			
+			setQuery(selectedCity);
+			fetchWeather(selectedCity);
+			fetchForecast(selectedCity);
+			skipNextDebounce()
+		}
+	}, [hydrated, selectedCity]);
 
-  const handleSelect = async (city: string) => {
-    skipNextDebounce();
-    setQuery(city);
-    setSelectedCity(city);
-    clearCitySuggestions();
-    await fetchWeather(city);
-  };
+	useEffect(() => {
+		if (isPending) return;
+		fetchCitySuggestions(debouncedQuery);
+	}, [debouncedQuery, isPending]);
 
-  return (
-    <div className={`position-relative mx-auto ${styles.wrapper}`}>
-      <SearchInput
-        id="city"
-        label="City"
-        value={query}
-        placeholder="Enter the city"
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <SuggestionList items={citySuggestions} onSelect={handleSelect} />
-    </div>
-  );
+	const handleSelect = async (city: string) => {
+
+		console.log('handleSelect', city);
+		
+		skipNextDebounce();
+		setQuery(city);
+		setSelectedCity(city);
+		clearCitySuggestions();
+		fetchWeather(city)
+		fetchForecast(city);
+	};
+
+	return (
+		<div className={`position-relative mx-auto ${styles.wrapper}`}>
+			<SearchInput
+				id="city"
+				value={query}
+				placeholder="Enter the city"
+				onChange={(e) => setQuery(e.target.value)}
+			/>
+			<SuggestionList items={citySuggestions} onSelect={handleSelect} />
+		</div>
+	);
 }

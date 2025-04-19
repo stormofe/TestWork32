@@ -13,7 +13,7 @@ interface Props {
 export default function StarToggle({
   active,
   onToggle,
-  size = 24,
+  size = 40,
   className = '',
   title,
 }: Props) {

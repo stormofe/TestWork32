@@ -15,7 +15,7 @@ export const mockForecast: ForecastResponse = {
   list: [
     {
       dt: 1713436800,
-      dt_txt: '2025-04-18 03:00:00',
+      dt_txt: '2025-04-19 03:00:00',
       main: {
         temp: 7.8,
         feels_like: 6.9,
@@ -31,7 +31,7 @@ export const mockForecast: ForecastResponse = {
     },
     {
       dt: 1713447600,
-      dt_txt: '2025-04-18 06:00:00',
+      dt_txt: '2025-04-19 06:00:00',
       main: {
         temp: 10.1,
         feels_like: 9.3,
@@ -47,7 +47,7 @@ export const mockForecast: ForecastResponse = {
     },
     {
       dt: 1713458400,
-      dt_txt: '2025-04-18 09:00:00',
+      dt_txt: '2025-04-19 09:00:00',
       main: {
         temp: 14.3,
         feels_like: 13.5,
@@ -63,12 +63,12 @@ export const mockForecast: ForecastResponse = {
     },
     {
       dt: 1713469200,
-      dt_txt: '2025-04-18 12:00:00',
+      dt_txt: '2025-04-19 12:00:00',
       main: {
         temp: 17.6,
         feels_like: 17.0,
         temp_min: 17,
-        temp_max: 18,
+        temp_max: 19,
         pressure: 1014,
         humidity: 58,
       },
@@ -79,11 +79,11 @@ export const mockForecast: ForecastResponse = {
     },
     {
       dt: 1713480000,
-      dt_txt: '2025-04-18 15:00:00',
+      dt_txt: '2025-04-19 15:00:00',
       main: {
-        temp: 18.9,
-        feels_like: 18.2,
-        temp_min: 18,
+        temp: 19.9,
+        feels_like: 19.2,
+        temp_min: 19,
         temp_max: 20,
         pressure: 1014,
         humidity: 55,
@@ -95,7 +95,7 @@ export const mockForecast: ForecastResponse = {
     },
     {
       dt: 1713490800,
-      dt_txt: '2025-04-18 18:00:00',
+      dt_txt: '2025-04-19 19:00:00',
       main: {
         temp: 16.4,
         feels_like: 15.9,
@@ -111,7 +111,7 @@ export const mockForecast: ForecastResponse = {
     },
     {
       dt: 1713501600,
-      dt_txt: '2025-04-18 21:00:00',
+      dt_txt: '2025-04-19 21:00:00',
       main: {
         temp: 12.0,
         feels_like: 11.4,
@@ -127,7 +127,7 @@ export const mockForecast: ForecastResponse = {
     },
     {
       dt: 1713512400,
-      dt_txt: '2025-04-19 00:00:00',
+      dt_txt: '2025-04-20 00:00:00',
       main: {
         temp: 9.2,
         feels_like: 8.3,

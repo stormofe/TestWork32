@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-//import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto } from 'next/font/google';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.scss';
@@ -10,15 +10,12 @@ export const metadata: Metadata = {
 	description: 'Check current weather',
 };
 
-//const geistSans = Geist({
-//  variable: "--font-geist-sans",
-//  subsets: ["latin"],
-//});
+const roboto = Roboto({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-roboto',
+});
 
-//const geistMono = Geist_Mono({
-//  variable: "--font-geist-mono",
-//  subsets: ["latin"],
-//});
 
 
 export default function RootLayout({
@@ -28,7 +25,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body cz-shortcut-listen="true">
+			<body cz-shortcut-listen="true" className={`${roboto.variable}`}>
 				<Navbar />
 				<div className="container">
 					{children}

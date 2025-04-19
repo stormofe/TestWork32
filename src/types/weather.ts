@@ -1,5 +1,7 @@
 export interface WeatherData {
 	name: string;
+	dt: number;
+	timezone: number;
 	weather: {
 		id: number;
 		main: string;
@@ -42,7 +44,7 @@ export interface CitySuggestion {
 
 
 export interface ForecastItem {
-  dt: number; // UNIX timestamp
+  dt: number; 
   main: {
     temp: number;
     feels_like: number;

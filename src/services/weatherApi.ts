@@ -20,7 +20,7 @@ const prepareCityName = (city: string) => {
 	return trimmedCity;
 };
 
-export const getCurrentWeather = async (city: string, lang = 'ru'): Promise<WeatherData> => {
+export const getCurrentWeather = async (city: string, lang = 'en'): Promise<WeatherData> => {
 	if (IS_MOCK) {
 		console.log('[MOCK] getCurrentWeather:', city);
 		return mockWeather;
@@ -37,7 +37,7 @@ export const getCurrentWeather = async (city: string, lang = 'ru'): Promise<Weat
 	return res.data;
 }
 
-export const getForecast = async (city: string, lang = 'ru') => {
+export const getForecast = async (city: string, lang = 'en') => {
 	if (IS_MOCK) {
 		console.log('[MOCK] getForecast:', city);
 		return mockForecast;
