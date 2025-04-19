@@ -9,12 +9,17 @@ export default function HomeClient() {
 	const {
 		selectedCity,
 		weatherData,
+		forecastData,
 		isLoading,
 		error,
 	} = useWeatherStore();
 
 	const weather = selectedCity
 		? weatherData[selectedCity]?.data
+		: null;
+
+		const forecast = selectedCity
+		? forecastData[selectedCity]?.data
 		: null;
 
 	const weatherType = weather?.weather[0]?.main.toLowerCase() || 'default';
@@ -25,6 +30,7 @@ export default function HomeClient() {
 				{isLoading && <div className="text-center">Загрузка...</div>}
 				{error && <div className="alert alert-danger text-center">{error}</div>}
 				{weather && <WeatherCard city={selectedCity} weather={weather} />}
+				
 			</div>
 		</WeatherBackground>
 	);

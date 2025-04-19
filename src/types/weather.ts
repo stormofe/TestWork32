@@ -40,34 +40,46 @@ export interface CitySuggestion {
 	state?: string;
 }
 
+
 export interface ForecastItem {
-	dt: number;
-	main: {
-		temp: number;
-		feels_like: number;
-		temp_min: number;
-		temp_max: number;
-		pressure: number;
-		humidity: number;
-	};
-	weather: {
-		id: number;
-		main: string;
-		description: string;
-		icon: string;
-	}[];
-	wind: {
-		speed: number;
-		deg: number;
-	};
-	dt_txt: string;
+  dt: number; // UNIX timestamp
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  weather: {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+  clouds: {
+    all: number;
+  };
+  wind: {
+    speed: number;
+    deg: number;
+  };
+  visibility: number;
+  dt_txt: string; // "2025-04-18 12:00:00"
 }
 
 export interface ForecastResponse {
-	city: {
-		name: string;
-		country: string;
-		state: string;
-	};
-	list: ForecastItem[];
+  cod: string;
+  message: number;
+  cnt: number;
+  list: ForecastItem[];
+  city: {
+    id: number;
+    name: string;
+    country: string;
+    timezone: number;
+    sunrise: number;
+    sunset: number;
+  };
 }
+

@@ -10,7 +10,6 @@ const nextConfig: NextConfig = {
       '@ui': path.resolve(__dirname, 'src/components/ui'),
       '@store': path.resolve(__dirname, 'src/store'),
       '@services': path.resolve(__dirname, 'src/services'),
-      '@types': path.resolve(__dirname, 'src/types'),
 			'@hooks': path.resolve(__dirname, 'src/hooks'),
     };
 

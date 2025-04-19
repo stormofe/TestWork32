@@ -1,66 +1,45 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-import { getCitySuggestions } from '@services/weatherApi';
-import { useWeatherStore } from '@store/useWeatherStore';
 import { useDebouncedValue } from '@hooks/useDebouncedValue';
+import { useWeatherStore } from '@store/useWeatherStore';
 import SearchInput from '@ui/SearchInput';
 import SuggestionList from '@ui/SuggestionList';
 
-import styles from './SearchBar.module.scss'
+import styles from './SearchBar.module.scss';
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');
-	const [debouncedQuery, skipNextDebounce, isPending] = useDebouncedValue(query, 400);
+  const [debouncedQuery, skipNextDebounce, isPending] = useDebouncedValue(query, 400);
 
   const {
     citySuggestions,
-    setCitySuggestions,
-    clearCitySuggestions,
-    setSuggestionsLoading,
-    setSuggestionError,
-    setSelectedCity,
     fetchWeather,
+    fetchCitySuggestions,
+    clearCitySuggestions,
+    setSelectedCity,
   } = useWeatherStore();
 
   useEffect(() => {
-    const fetchSuggestions = async () => {
-			if (isPending || debouncedQuery.length < 2) {
-				clearCitySuggestions();
-				return;
-			}
-
-      try {
-        setSuggestionsLoading(true);
-        const suggestions = await getCitySuggestions(debouncedQuery);
-        const names = suggestions.map((c) => `${c.name}, ${c.country}${c.state ? `, ${c.state}` : ''}`);
-        setCitySuggestions(names);
-      } catch {
-        setSuggestionError('Ошибка загрузки подсказок');
-      } finally {
-        setSuggestionsLoading(false);
-      }
-    };
-
-    fetchSuggestions();
+    if (isPending) return;
+    fetchCitySuggestions(debouncedQuery);
   }, [debouncedQuery, isPending]);
 
   const handleSelect = async (city: string) => {
+    skipNextDebounce();
     setQuery(city);
-		setSelectedCity(city);
+    setSelectedCity(city);
     clearCitySuggestions();
-		skipNextDebounce()
     await fetchWeather(city);
   };
 
   return (
-    <div className={`position-relative mx-auto ${styles.wrapper}`} >
+    <div className={`position-relative mx-auto ${styles.wrapper}`}>
       <SearchInput
         id="city"
-        label="Город"
+        label="City"
         value={query}
-        placeholder="Введите город"
+        placeholder="Enter the city"
         onChange={(e) => setQuery(e.target.value)}
       />
       <SuggestionList items={citySuggestions} onSelect={handleSelect} />

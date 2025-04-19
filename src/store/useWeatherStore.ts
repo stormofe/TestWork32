@@ -1,7 +1,7 @@
 'use client';
 
-import { getCurrentWeather } from '@/services/weatherApi';
-import { WeatherData } from '@/types/weather';
+import { getCitySuggestions, getCurrentWeather, getForecast } from '@services/weatherApi';
+import { ForecastResponse, WeatherData } from '@/types/weather';
 import axios from 'axios';
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
@@ -13,7 +13,27 @@ type WeatherState = {
 	error: string | null;
 
 	weatherData: Record<string, { data: WeatherData; timestamp: number }>;
+	forecastData: Record<string, { data: ForecastResponse; timestamp: number }>;
+
+	citySuggestions: string[];
+	isSuggestionsLoading: boolean;
+	suggestionError: string | null;
+
+	hydrated: boolean;
+
+	setSelectedCity: (city: string) => void;
+
+	fetchCitySuggestions: (query: string) => Promise<void>;
+	setCitySuggestions: (cities: string[]) => void;
+	clearCitySuggestions: () => void;
+	setSuggestionsLoading: (loading: boolean) => void;
+	setSuggestionError: (msg: string | null) => void;
+
+	fetchWeather: (city: string) => Promise<void>;
 	setWeatherData: (city: string, data: WeatherData) => void;
+
+	fetchForecast: (city: string) => Promise<void>;
+	setForecastData: (city: string, data: ForecastResponse) => void;
 
 	addFavorite: (city: string) => void;
 	removeFavorite: (city: string) => void;
@@ -22,19 +42,6 @@ type WeatherState = {
 	setLoading: (loading: boolean) => void;
 	setError: (message: string | null) => void;
 
-	fetchWeather: (city: string) => Promise<void>;
-
-	citySuggestions: string[];
-	isSuggestionsLoading: boolean;
-	suggestionError: string | null;
-	setCitySuggestions: (cities: string[]) => void;
-	clearCitySuggestions: () => void;
-	setSuggestionsLoading: (loading: boolean) => void;
-	setSuggestionError: (msg: string | null) => void;
-
-	setSelectedCity: (city: string) => void;
-
-	hydrated: boolean;
 	setHydrated: () => void;
 
 	cleanupCache: () => void;
@@ -48,43 +55,51 @@ export const useWeatherStore = create<WeatherState>()(
 				favorites: [],
 				isLoading: false,
 				error: null,
+
 				weatherData: {},
+				forecastData: {},
+
 				citySuggestions: [],
 				isSuggestionsLoading: false,
 				suggestionError: null,
+
 				hydrated: false,
-
-				setHydrated: () => set({ hydrated: true }),
-
-				setWeatherData: (city, data) =>
-					set((state) => ({
-						weatherData: {
-							...state.weatherData,
-							[city]: {
-								data,
-								timestamp: Date.now(),
-							},
-						},
-					})),
 
 				setSelectedCity: (city) => set({ selectedCity: city }),
 
-				addFavorite: (city) =>
-					set((state) =>
-						state.favorites.includes(city)
-							? state
-							: { favorites: [...state.favorites, city] }
-					),
-
-				removeFavorite: (city) =>
-					set((state) => ({
-						favorites: state.favorites.filter((c) => c !== city),
-					})),
-
-				isFavorite: (city) => get().favorites.includes(city),
-
-				setLoading: (loading) => set({ isLoading: loading }),
-				setError: (message) => set({ error: message }),
+				fetchCitySuggestions: async (query: string) => {
+					const {
+						setSuggestionsLoading,
+						setSuggestionError,
+						setCitySuggestions,
+						clearCitySuggestions,
+					} = get();
+				
+					const trimmed = query.trim();
+				
+					if (trimmed.length < 2) {
+						clearCitySuggestions();
+						return;
+					}
+				
+					try {
+						setSuggestionsLoading(true);
+						const suggestions = await getCitySuggestions(trimmed);
+						const names = suggestions.map((c) =>
+							`${c.name}, ${c.country}${c.state ? `, ${c.state}` : ''}`
+						);
+						setCitySuggestions(names);
+					} catch {
+						setSuggestionError('Ошибка загрузки подсказок');
+					} finally {
+						setSuggestionsLoading(false);
+					}
+				},
+				
+				setCitySuggestions: (cities) => set({ citySuggestions: cities }),
+				clearCitySuggestions: () => set({ citySuggestions: [] }),
+				setSuggestionsLoading: (loading) => set({ isSuggestionsLoading: loading }),
+				setSuggestionError: (msg) => set({ suggestionError: msg }),
 
 				fetchWeather: async (city: string) => {
 					get().cleanupCache();
@@ -121,11 +136,65 @@ export const useWeatherStore = create<WeatherState>()(
 						setLoading(false);
 					}
 				},
+				setWeatherData: (city, data) =>
+					set((state) => ({
+						weatherData: {
+							...state.weatherData,
+							[city]: {
+								data,
+								timestamp: Date.now(),
+							},
+						},
+					})),
 
-				setCitySuggestions: (cities) => set({ citySuggestions: cities }),
-				clearCitySuggestions: () => set({ citySuggestions: [] }),
-				setSuggestionsLoading: (loading) => set({ isSuggestionsLoading: loading }),
-				setSuggestionError: (msg) => set({ suggestionError: msg }),
+				fetchForecast: async (city: string) => {
+					const { forecastData, setForecastData } = get();
+					const ttl = 10 * 60 * 1000;
+					const key = city.toLowerCase();
+					const cached = forecastData[key];
+
+					if (cached && Date.now() - cached.timestamp < ttl) {
+						console.log('[forecast] Используем кэш');
+						return;
+					}
+
+					try {
+						const data = await getForecast(city); // из API
+						setForecastData(city, data);
+					} catch (err) {
+						console.error('[forecast error]', err);
+					}
+				},
+
+				setForecastData: (city, data) =>
+					set((state) => ({
+						forecastData: {
+							...state.forecastData,
+							[city]: {
+								data,
+								timestamp: Date.now(),
+							},
+						},
+					})),
+
+				addFavorite: (city) =>
+					set((state) =>
+						state.favorites.includes(city)
+							? state
+							: { favorites: [...state.favorites, city] }
+					),
+
+				removeFavorite: (city) =>
+					set((state) => ({
+						favorites: state.favorites.filter((c) => c !== city),
+					})),
+
+				isFavorite: (city) => get().favorites.includes(city),
+
+				setLoading: (loading) => set({ isLoading: loading }),
+				setError: (message) => set({ error: message }),
+
+				setHydrated: () => set({ hydrated: true }),
 
 				cleanupCache: () => {
 					const TTL = 10 * 60 * 1000;
