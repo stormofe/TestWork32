@@ -6,7 +6,7 @@ An interactive application for viewing current weather and a 5‑day forecast wi
 
 ## 🚀 Features
 
-- 🔍 City weather search with autocomplete  
+- 🔍 City weather search with autocomplete and debounced API requests
 - 🌤️ Current weather: temperature, “feels like,” wind, description  
 - 📅 5‑day forecast with a temperature chart  
 - ⭐ Saving favorite cities (locally, with persistence)  
@@ -15,6 +15,7 @@ An interactive application for viewing current weather and a 5‑day forecast wi
 - ⚡ Data caching with auto‑cleanup (TTL)  
 - 🧠 Zustand + TypeScript for state management  
 - 💅 Bootstrap + SCSS Modules for responsive styling  
+- 📱 Fully mobile‑optimized responsive layout
 
 ---
 
@@ -60,7 +61,7 @@ If you don’t have your own API key, you can use mock data instead:
 
 ## 🚀 Возможности
 
-- 🔍 Поиск погоды по названию города с автоподсказками
+- 🔍 Поиск погоды по названию города с автоподсказками и debounced API запросами
 - 🌤️ Текущая погода: температура, ощущается как, ветер, описание
 - 📅 Прогноз на 5 дней с температурным графиком
 - ⭐ Сохранение избранных городов (локально, с персистом)
@@ -69,6 +70,7 @@ If you don’t have your own API key, you can use mock data instead:
 - ⚡ Кэширование данных с автоочисткой по TTL
 - 🧠 Zustand + TypeScript для управления состоянием
 - 💅 Bootstrap + SCSS Modules для адаптивной вёрстки
+- 📱 Адаптация под мобильные устройства
 
 ---
 
