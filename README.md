@@ -90,22 +90,22 @@ If you don’t have your own API key, you can use mock data instead:
 
 1. Установи зависимости:
 
-npm install
+   npm install
 
 2. Создай .env.local файл:
-NEXT_PUBLIC_OPENWEATHER_API_KEY=your_api_key_here
+   NEXT_PUBLIC_OPENWEATHER_API_KEY=your_api_key_here
 
 3. Запусти приложение:
 
-npm run dev
+   npm run dev
 
 
-Если нет своего ключа, то можно запустить с мок-данными
+## Если нет своего ключа, то можно запустить с мок-данными
 
 2. Создай .env.local файл:
 
-NEXT_PUBLIC_USE_MOCK=true
+   NEXT_PUBLIC_USE_MOCK=true
 
 3. Запусти приложение:
 
-npm run dev
+   npm run dev
