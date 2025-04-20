@@ -1,10 +1,10 @@
 'use client';
 
-import { getCitySuggestions, getCurrentWeather, getForecast } from '@services/weatherApi';
-import { ForecastResponse, WeatherData } from '@/types/weather';
 import axios from 'axios';
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
+import { getCitySuggestions, getCurrentWeather, getForecast } from '@services/weatherApi';
+import { ForecastResponse, WeatherData } from '@/types/weather';
 import { wrapAsync } from '@/utils/wrapAsync';
 
 type WeatherState = {

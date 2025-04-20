@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useDebouncedValue } from '@hooks/useDebouncedValue';
 import { useWeatherStore } from '@store/useWeatherStore';
+
 import SearchInput from '@ui/SearchInput';
 import SuggestionList from '@ui/SuggestionList';
 
@@ -27,7 +28,6 @@ export default function SearchBar() {
 		if (hydrated && selectedCity) {
 			setQuery(selectedCity);
 			skipNextDebounce()
-			
 		}
 	}, [hydrated, selectedCity]);
 

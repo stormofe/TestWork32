@@ -1,11 +1,12 @@
 'use client';
 
 import { useWeatherStore } from '@store/useWeatherStore';
+
 import SearchBar from '@components/SearchBar';
+import WeatherBackground from '@ui/WeatherBackground';
+import TodayTempChart from '@components/TodayTempChart';
+import WeatherCardSk from '@ui/skeletons/WeatherCardSk';
 import WeatherCard from '@ui/WeatherCard';
-import WeatherBackground from '@/components/ui/WeatherBackground';
-import TodayTempChart from '@/components/ui/charts/TodayTempChart';
-import WeatherCardSk from '@/components/ui/skeletons/WeatherCardSk';
 
 export default function HomeClient() {
 	const {
@@ -30,12 +31,11 @@ export default function HomeClient() {
 		: null;
 
 	const weatherType = weather?.weather[0]?.main.toLowerCase() || 'default';
-	//const weatherType = forecastData[selectedCity]?.data.list[0].weather[0].main.toLowerCase() || 'default';
+
 	return (
 		<WeatherBackground weatherType={weatherType}>
 			<SearchBar />
 			<div className="mt-4">
-
 				{!weather && isLoadingWeather && <WeatherCardSk />}
 				{errorWeather && <div className="alert alert-danger text-center">{errorWeather}</div>}
 				{weather && <WeatherCard city={selectedCity} weather={weather} />}

@@ -1,10 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import Image from 'next/image';
 import { WeatherData } from '@/types/weather';
-import styles from './WeatherCard.module.scss';
 import FavoriteButton from '../FavoriteButton';
-import Link from 'next/link';
+
+import styles from './WeatherCard.module.scss';
 
 interface Props {
 	city: string;
@@ -26,7 +27,7 @@ export default function WeatherCard({ city, weather }: Props) {
 		<div className={`container ${styles.card}`}>
 			<FavoriteButton city={city} />
 			<div className="row  align-items-center">
-				{/* Left: City & time */}
+
 				<div className="col-md-3 text-center text-md-start mb-3 mb-md-0">
 					<h4 className="mb-2">{city}</h4>
 					<p className="mb-2">{date}</p>
@@ -39,7 +40,6 @@ export default function WeatherCard({ city, weather }: Props) {
 					</Link>
 				</div>
 
-				{/* Center: Temp & Icon */}
 				<div className="col-md-5 text-center mb-3 mb-md-0">
 					<h1 className="display-4 mb-1">{Math.round(temp)}°C</h1>
 					<p className="mb-2">Feels like: {Math.round(feels_like)}°C</p>
@@ -52,7 +52,6 @@ export default function WeatherCard({ city, weather }: Props) {
 					<p className="fw-semibold mt-2">{main}</p>
 				</div>
 
-				{/* Right: Weather details */}
 				<div className="col-md-4 text-md-start text-center">
 					<p className="mb-1 d-flex justify-content-between"><span >🌅 Sunrise:</span> <strong>{sunrise}</strong></p>
 					<p className="mb-1 d-flex justify-content-between"><span>🌇 Sunset:</span> <strong>{sunset}</strong></p>

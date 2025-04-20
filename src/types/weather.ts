@@ -85,3 +85,8 @@ export interface ForecastResponse {
   };
 }
 
+export interface ForecastChartPoint {
+  temp: number;
+  icon: string;
+  [key: string]: string | number; // для time/date и других динамических ключей
+}

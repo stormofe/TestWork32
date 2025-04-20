@@ -1,4 +1,4 @@
-import FavoriteWeatherList from './FavoriteWeatherList';
+import ClientFavorites from './ClientFavorites';
 
 export const metadata = {
   title: 'Featured Cities - Weather App',
@@ -8,7 +8,7 @@ export const metadata = {
 export default function FavoritesPage() {
   return (
     <div className="container py-3">
-      <FavoriteWeatherList />
+      <ClientFavorites />
     </div>
   );
 }

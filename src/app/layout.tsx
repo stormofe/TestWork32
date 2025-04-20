@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Roboto } from 'next/font/google';
 
+import Navbar from "@ui/Navbar";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.scss';
-import Navbar from "@ui/Navbar";
 
 export const metadata: Metadata = {
 	title: 'Weather',
@@ -15,8 +16,6 @@ const roboto = Roboto({
   subsets: ['latin'],
   variable: '--font-roboto',
 });
-
-
 
 export default function RootLayout({
 	children,

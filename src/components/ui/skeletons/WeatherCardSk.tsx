@@ -1,4 +1,5 @@
 import styles from '../WeatherCard.module.scss'
+
 function WeatherCardSk() {
 	return (
 		<div className={`${styles.card} d-flex justify-content-center`}>
