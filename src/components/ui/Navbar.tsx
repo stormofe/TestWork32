@@ -39,15 +39,7 @@ export default function Navbar() {
 							Weather
 						</Link>
 					</li>
-					<li className="nav-item">
-						<Link
-							className={`nav-link ${pathname === '/favorites' ? 'active' : ''}`}
-							href="/favorites"
-							onClick={closeMenu}
-						>
-							Favorite cities
-						</Link>
-					</li>
+
 					{selectedCity && (
 						<li className="nav-item">
 							<Link
@@ -59,6 +51,15 @@ export default function Navbar() {
 							</Link>
 						</li>
 					)}
+					<li className="nav-item">
+						<Link
+							className={`nav-link ${pathname === '/favorites' ? 'active' : ''}`}
+							href="/favorites"
+							onClick={closeMenu}
+						>
+							Favorite cities
+						</Link>
+					</li>
 				</ul>
 			</div>
 		</nav>
