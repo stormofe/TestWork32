@@ -1,0 +1,57 @@
+@import './variables';
+@import 'bootstrap/scss/bootstrap';
+
+body {
+	min-height: 100vh;
+	color: var(--bs-body-color);
+	font-family: var(--font-roboto);
+	transition: background 0.6s ease-in-out;
+	background: linear-gradient(135deg, #4BB5F1 0%, #2F2CBC 100%) no-repeat;
+	height: 100%;
+}
+
+.navbar {
+	background-color: var(--navbar-bg) !important;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	.nav-link {
+		color: var(--bs-body-color);
+		transition: color 0.2s ease-in-out;
+
+		&.active,
+		&:hover {
+			color: var(--bs-primary);
+			text-decoration: underline;
+		}
+	}
+}
+
+.card {
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+	border-radius: 12px;
+}
+
+.weather-clear {
+	background: linear-gradient(to bottom, #d8c850, #ffffff) no-repeat;
+	background-attachment: fixed;
+}
+
+.weather-rain {
+	background: linear-gradient(to bottom, #9ecdf2, #ffffff) no-repeat;
+	color: #223;
+}
+
+.weather-clouds {
+	background: linear-gradient(to bottom, #616f79, #ffffff) no-repeat;
+	color: #333;
+}
+
+.weather-snow {
+	background: linear-gradient(to bottom, #f0f8ff, #ffffff) no-repeat;
+	color: #1a1a1a;
+}
+
+.weather-thunderstorm {
+	background: linear-gradient(to bottom, #32274d, #ffffff) no-repeat;
+	color: #333;
+}
+
