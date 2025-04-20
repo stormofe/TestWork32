@@ -6,6 +6,7 @@ import { persist, devtools } from 'zustand/middleware';
 import { getCitySuggestions, getCurrentWeather, getForecast } from '@services/weatherApi';
 import { ForecastResponse, WeatherData } from '@/types/weather';
 import { wrapAsync } from '@/utils/wrapAsync';
+import { filterFreshCache, isFreshCache } from '@/utils/cacheUtils';
 
 type WeatherState = {
 	selectedCity: string;
@@ -53,6 +54,8 @@ type WeatherState = {
 	cleanupForecastCache: () => void;
 
 };
+
+const ttl = 10 * 60 * 1000;
 
 export const useWeatherStore = create<WeatherState>()(
 	devtools(
@@ -130,13 +133,10 @@ export const useWeatherStore = create<WeatherState>()(
 						setWeatherData,
 						weatherData,
 					} = get();
+					const cached = weatherData[city];
 
-					const ttl = 10 * 60 * 1000;
-					const key = city;
-					const cacheEntry = weatherData[key];
-
-					if (cacheEntry && Date.now() - cacheEntry.timestamp < ttl) {
-						console.log(`[WeatherStore] Using cached weather for "${city}"`);
+					if (isFreshCache(cached)) {
+						console.log('[WeatherStore] Using cached forecast for:', city);
 						return;
 					}
 
@@ -165,10 +165,8 @@ export const useWeatherStore = create<WeatherState>()(
 				},
 				setWeatherData: (city, data) =>
 					set((state) => {
-						const key = city;
 						const now = Date.now();
-						const existing = state.weatherData[key];
-						const ttl = 10 * 60 * 1000;
+						const existing = state.weatherData[city];
 
 						if (existing && now - existing.timestamp < ttl) {
 							return state;
@@ -177,7 +175,7 @@ export const useWeatherStore = create<WeatherState>()(
 						return {
 							weatherData: {
 								...state.weatherData,
-								[key]: {
+								[city]: {
 									data,
 									timestamp: now,
 								},
@@ -196,14 +194,13 @@ export const useWeatherStore = create<WeatherState>()(
 						setForecastError,
 					} = get();
 
-					const ttl = 10 * 60 * 1000;
-					const key = city;
-					const cached = forecastData[key];
-					if (cached && Date.now() - cached.timestamp < ttl) {
+					const cached = forecastData[city];
+
+					if (isFreshCache(cached)) {
 						console.log('[Forecast] Using cached forecast for:', city);
 						return;
 					}
-					console.log('FORECAST', city);
+
 					await wrapAsync(
 						() => getForecast(city),
 						{
@@ -224,11 +221,9 @@ export const useWeatherStore = create<WeatherState>()(
 				},
 				setForecastData: (city, data) =>
 					set((state) => {
-						const key = city;
 						const now = Date.now();
-						const current = state.forecastData[key];
-						const ttl = 10 * 60 * 1000;
-
+						const current = state.forecastData[city];
+						
 						if (current && now - current.timestamp < ttl) {
 							return state; // skip update if still fresh
 						}
@@ -236,7 +231,7 @@ export const useWeatherStore = create<WeatherState>()(
 						return {
 							forecastData: {
 								...state.forecastData,
-								[key]: {
+								[city]: {
 									data,
 									timestamp: Date.now(),
 								},
@@ -262,29 +257,15 @@ export const useWeatherStore = create<WeatherState>()(
 				setHydrated: () => set({ hydrated: true }),
 
 				cleanupWeatherCache: () => {
-					const TTL = 10 * 60 * 1000;
-					const now = Date.now();
 					const current = get().weatherData;
-
-					const filtered = Object.fromEntries(
-						Object.entries(current).filter(([_, entry]) => now - entry.timestamp < TTL)
-					);
-
+					const filtered = filterFreshCache(current);
 					set({ weatherData: filtered });
 				},
 				cleanupForecastCache: () => {
-					const TTL = 10 * 60 * 1000;
-					const now = Date.now();
 					const current = get().forecastData;
-
-					const filtered = Object.fromEntries(
-						Object.entries(current).filter(([_, entry]) => now - entry.timestamp < TTL)
-					);
-
+					const filtered = filterFreshCache(current);
 					set({ forecastData: filtered });
 				},
-
-
 			}),
 			{
 				name: 'weather-store',
