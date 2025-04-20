@@ -2,6 +2,8 @@ import { WeatherData } from "@/types/weather";
 
 export const mockWeather: WeatherData = {
 	name: 'Moscow',
+	dt: 834562845,
+	timezone: 4868376,
 	weather: [
 		{
 			id: 800,

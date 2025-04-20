@@ -5,7 +5,7 @@ export function filterFreshCache<T>(
   const now = Date.now();
 
   return Object.fromEntries(
-    Object.entries(data).filter(([_, entry]) => now - entry.timestamp < ttl)
+    Object.entries(data).filter(([, entry]) => now - entry.timestamp < ttl)
   );
 }
 

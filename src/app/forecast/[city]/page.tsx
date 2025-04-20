@@ -1,15 +1,20 @@
+import { Metadata } from 'next';
 import ClientForecast from './ClientForecast';
 
 interface Props {
-	params: { city: string };
+	params: Promise<{ city: string }>
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata(
+	{ params }: Props
+): Promise<Metadata> {
+	// ждём, пока Promise с params разрешится
 	const { city } = await params
+
 	return {
 		title: `Weather forecast in ${city} — Weather App`,
 		description: `Weather forecast for 5 days in ${city}. Temperature, wind, precipitation.`,
-	};
+	}
 }
 
 export default async function ForecastPage({ params }: Props) {

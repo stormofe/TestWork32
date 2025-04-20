@@ -33,7 +33,6 @@ export default function TemperatureChart({
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data}
-          padding={{ right: 20 }}
           margin={{ top: 50, right: 20, left: 0, bottom: 20 }}
         >
           <defs>

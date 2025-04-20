@@ -5,7 +5,7 @@ import { mockSuggestions } from '@/mocks/mockSuggestions';
 import { mockWeather } from '@/mocks/mockWeather';
 import { CitySuggestion, WeatherData } from '@/types/weather';
 
-const IS_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === 'false';
+const IS_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 const BASE_URL = 'https://api.openweathermap.org';
 
